@@ -10,3 +10,9 @@ Because of the limited reliability of Leaderboard, we need to seperate a validat
 
 ### Day 2
 Today dived deep into the balanced logarithmic 
+
+80% Train Loss: 0.02813351148382359
+20% Val Loss: 0.023899050907612334
+
+80% Train Loss: 0.00832058118096344
+20% Val Loss: 0.011302249154983545
