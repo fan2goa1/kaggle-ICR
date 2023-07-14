@@ -3,6 +3,10 @@ This is a repository for [ICR](https://www.kaggle.com/competitions/icr-identify-
 
 This is my first time to participate in a kaggle expert competition, which challenges me a lot. Below I introduce my final code and summarize the experience. Also, I write down the detailed actions that I have taken for this competition by day in the second part.
 
+## Enviroment Setup
+All packages used in this competition except tabpfn are common used. So if you don't have any of them, please run '''pip install xxx''' or '''conda install''' to install it. 
+
+I use TabPFN model in this competition, you can download the package from [this Github link](https://github.com/kashif/TabPFN) and import it in your code.
 
 ## Experience and Results
 ### Day 1
@@ -28,7 +32,7 @@ After integerized the trainning data, I found that BN may represented age, which
 
 In addition I tried different random seeds in K-Fold, and found that random_status=19 preformed best. Below was some result losses in different arguments.
 
-seed42:
+seed=42:
 
 80% Train Loss: 0.02813351148382359
 
@@ -36,7 +40,7 @@ seed42:
 
 ------------------------------------
 
-seed19:
+seed=19:
 
 80% Train Loss: 0.00832058118096344
 
@@ -44,7 +48,7 @@ seed19:
 
 ------------------------------------
 
-integer + repeat BN + seed19:
+integer + repeat BN + seed=19:
 
 80% Train Loss: 0.00990054752769389
 
