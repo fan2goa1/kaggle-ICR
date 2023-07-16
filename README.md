@@ -59,4 +59,7 @@ The corresponding version of the notebook is [here]().
 
 ### Day 4&5
 I was wondering about why my local CV is extremely low but LB was mutiple times higher than CV. The answer was, I used Random Over Sample before KF, where meant there were some data both in trainning dataset and validation dataset. To correct the code, I firstly fold the whole trainning dataset and then do the over sample.
+
+Moreover, I made a mistake in previous days. I couldn't copy BN for times, because it may causes feature collinearity. Beyond this method, I tried data binning.
+
 But a new question is that, I can't make a better LB score(< 0.09). I have tried some EDA methods/tricks but the LB goes up rather than become smaller.
