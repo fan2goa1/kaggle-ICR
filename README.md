@@ -32,29 +32,6 @@ After integerized the trainning data, I found that BN may represented age, which
 
 In addition I tried different random seeds in K-Fold, and found that random_status=19 preformed best. Below was some result losses in different arguments.
 
-seed=42:
-
-80% Train Loss: 0.02813351148382359
-
-20% Val Loss: 0.023899050907612334
-
-------------------------------------
-
-seed=19:
-
-80% Train Loss: 0.00832058118096344
-
-20% Val Loss: 0.011302249154983545
-
-------------------------------------
-
-integer + repeat BN + seed=19:
-
-80% Train Loss: 0.00990054752769389
-
-20% Val Loss: 0.0019808524959592897
-
-
 The corresponding version of the notebook is [here]().
 
 ### Day 4&5
