@@ -1,42 +1,54 @@
 # kaggle-ICR
 This is a repository for [ICR](https://www.kaggle.com/competitions/icr-identify-age-related-conditions)(Identifying Age-Related Conditions) competition.
 
-This is my first time to participate in a kaggle expert competition, which challenges me a lot. Below I introduce my final code and summarize the experience. Also, I write down the detailed actions that I have taken for this competition by day in the second part.
+This is my first time to participate in a kaggle expert competition, which challenges me a lot. Below I introduce my final code and summarize the experience, which may of some help for you.
 
 ## Enviroment Setup
-All packages used in this competition except tabpfn are common used. So if you don't have any of them, please run ```pip install xxx``` or ```conda install``` to install it. 
+All packages used in this competition except tabpfn are common used. So if you don't have any of them, please run ```pip install xxx``` or ```conda install```(in virtual envs) to install it. 
 
-I use TabPFN model in this competition, you can download the package from [this Github link](https://github.com/kashif/TabPFN) and import it in your code.
+I used TabPFN model in this competition, you can download the package from [this Github link](https://github.com/kashif/TabPFN) and import it in your code.
 
-## Experience and Results
-### Day 1
+## Code
+
+## Experience
+### Baseline from Discussion
 Found some good notebooks in Discussion and coded a baseline for ICR. I used the same model with [this notebook](https://www.kaggle.com/code/aikhmelnytskyy/public-krni-pdi-with-two-additional-models), which trained a ensembled model including two XGBoost Classifiers and two TabPFN Classifiers.
 
-Because of the limited reliability of Leaderboard(the public score are often referred to as Lb), we need to seperate a validation set from the original trianning set for calculating the balanced logarithmic loss and evaluate our model. In particular, I divided 20% of the trainning data to form the validation dataset, and used the remaining 80% data to train the model. Then, I calculated the balanced log loss of the prediction of validation dataset as "cross validation score"(often referred to as CV).
+### The Importance of CV(Cross Validation)
+Because of the limited reliability of Leaderboard(the public score are often referred to as Lb), we need to seperate a validation set from the original trianning set for calculating the balanced logarithmic loss and evaluate our model. In particular, I tried **StraightKF** and ordinary KFold to seperate 20% of the data as validation dataset in every iteration.
 
-The corresponding notebook is [here](https://www.kaggle.com/code/stevenzzf0926/icr-xgboost-tabpfn?scriptVersionId=136694987). I might done something wrong, because the the Lb is 1.2, ranking 4685/5042.
+### The Real Evaluation Formula
+Due to the fact that the public code had led a wrong derection of the Balanced Log loss, [this discussion](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/422442) had clarified **the right one**.
 
-### Day 2
-To begin with, I fixed the bug and modified my code. I added an outer K-Fold object, which could help me seperate the dataset into 5 folds.
+The right Formula is as follows.
+$$
+\text { Log Loss }=\frac{-\frac{1}{N_0} \sum y_{0 i} \log p_{0 i}-\frac{1}{N_1} \sum y_{1 i} \log p_{1 i}}{2}
+$$
 
-Today I dived deep into the balanced logarithmic loss function. By the help of [this discussion](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/422442), I suprisingly found that my code implement of balanced log loss was totally wrong.
+### Feature Engineering
+#### Integerized Data
+An interesting [post](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413198) showed an interesting thing that the dataset can be integerized. Just like what this post said, a dataset without integer attributes was wired.
 
-I tried to figure out what happened to my previous function but I didn't found any mistake. Maybe the precision couldn't meet the requirement. Also, I learned about how to use sklearn.metrics.logloss from this discussion.
+After integerized the trainning data, we found that BN may represented age, which was ranging from 29 to 83. So I tried to make a bin of BN feature which may strengthen the effect of this feature.
 
-Finally, the corresponding version of the notebook is [here](https://www.kaggle.com/code/stevenzzf0926/icr-xgboost-tabpfn?scriptVersionId=136694987). The Lb was 0.12 and CV was approximately 0.02, ranking 1376/5085.
+#### Feature Derivation
+Inorder to improve our model, I tried to add some new features in training data. Firstly, I tried some derived features such as the nan number, but it turned out to be no use.
 
-### Day 3
-Today I found an interesting [post](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/413198). This post showed an interesting thing that the dataset can be integerized. Just like what this post said, a dataset without integer attributes was wired.
+Then, with the help of K-Means++, I got several different K-Means centers with data whose label is 0 and 1, respectively. I added the maximum and minimum distance of the each data among those centers to the training data, which was somewhat useful.
 
-After integerized the trainning data, I found that BN may represented age, which was ranging from 29 to 83. So I copied train['BN'] three times and added to the end of trainning dataset.
+But the most useful one is creating polynomial features. I will introduce it later.
 
-In addition I tried different random seeds in K-Fold, and found that random_status=19 preformed best. Below was some result losses in different arguments.
+#### Grabbing the Most "Important" Features
+There are several different anonymous features in this competition, but how we can identify the most "important" features? Here I tried to use [SHAP](https://shap.readthedocs.io/en/latest/index.html) to calculate the shapley value of each features, and I found DU, BQ, AB, FL are apparently important than other features. So I used these features to create second-order or even third-order features.
 
-The corresponding version of the notebook is [here]().
+### Ensemble Models
+This is the key point of the competition. I generated TabPFN and XgboostClassifier at the very beginning, then added lgbm and catboost classifiers to the model. I still try to explore different models till now.(Update on 8.4)
 
-### Day 4&5
-I was wondering about why my local CV is extremely low but LB was mutiple times higher than CV. The answer was, I used Random Over Sample before KF, where meant there were some data both in trainning dataset and validation dataset. To correct the code, I firstly fold the whole trainning dataset and then do the over sample.
+Parameters' tuning is strongly needed in training models.
 
-Moreover, I made a mistake in previous days. I couldn't copy BN for times, because it may causes feature collinearity. Beyond this method, I tried data binning.
+### Post Processing
+The code with highest public LB score uses two actions to adjust the predicted probabilities. The first one is balancing the inequality between the sum of probabilities between A and B+D+G. My understanding of this is that this action may do harm for the bll of Class 0's data, but it may highly reduce the bll of Class 1's (that is B+D+G) data.
 
-But a new question is that, I can't make a better LB score(< 0.09). I have tried some EDA methods/tricks but the LB goes up rather than become smaller.
+The second one is thresholding, writing the code like ```p0[p0 > 0.65] = 1``` to help us get a lower LB score, but it is risky.
+
+For the first action, that is, probabilities calibration, we have [another method](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426748) providing a better public LB score.
