@@ -59,4 +59,6 @@ For the first action, that is, probabilities calibration, we have [another metho
 ## After the Comp
 It is frustrated for me to defeat in this competition. My best submission is my last one but I didn't choose it, which made me lose the silver medal.
 
-What impressed me most in this competition is that, it may be the most severe shake up of all time. And to my surprise, even a single catboost model without any feature engineering could get a silver medal. Thus, I give up to study more about this tricky competition. In a word, it's a boring game.
+What impressed me most in this competition is that, it may be the most severe shake up of all time. And to my surprise, even a single catboost model without any feature engineering could get a silver medal. Thus, I give up to study more about this tricky competition.
+
+In a word, it's a boring game.
