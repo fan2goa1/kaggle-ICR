@@ -9,6 +9,7 @@ All packages used in this competition except TabPFN are common used. So if you d
 I used TabPFN model in this competition, you can download the package from [this Github link](https://github.com/kashif/TabPFN) and import it in your code.
 
 ## Code
+You can see my code with best private leaderboard score in this repository. The <font color='red'>main point</font> of the code can be divide into those parts.
 
 ## Experience
 ### Baseline from Discussion
@@ -25,9 +26,7 @@ Because of the limited reliability of Leaderboard(the public score are often ref
 Due to the fact that the public code had led a wrong derection of the Balanced Log loss, [this discussion](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/422442) had clarified **the right one**.
 
 The right Formula is as follows.
-$$
-\text { Log Loss }=\frac{-\frac{1}{N_0} \sum y_{0 i} \log p_{0 i}-\frac{1}{N_1} \sum y_{1 i} \log p_{1 i}}{2}
-$$
+$$\text { Log Loss }=\frac{-\frac{1}{N_0} \sum y_{0 i} \log p_{0 i}-\frac{1}{N_1} \sum y_{1 i} \log p_{1 i}}{2}$$
 
 ### Feature Engineering
 #### Integerized Data
@@ -56,3 +55,8 @@ The code with highest public LB score uses two actions to adjust the predicted p
 The second one is thresholding, writing the code like ```p0[p0 > 0.65] = 1``` to help us get a lower LB score, but it is risky.
 
 For the first action, that is, probabilities calibration, we have [another method](https://www.kaggle.com/competitions/icr-identify-age-related-conditions/discussion/426748) providing a better public LB score.
+
+## After the Comp
+It is frustrated for me to defeat in this competition. My best submission is my last one but I didn't choose it, which made me lose the silver medal.
+
+What impressed me most in this competition is that, it may be the most severe shake up of all time. And to my surprise, even a single catboost model without any feature engineering could get a silver medal. Thus, I give up to study more about this tricky competition. In a word, it's a boring game.
