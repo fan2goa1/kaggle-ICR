@@ -1,5 +1,5 @@
 # kaggle-ICR
-This is a repository for [ICR](https://www.kaggle.com/competitions/icr-identify-age-related-conditions)(Identifying Age-Related Conditions) competition.
+This is a repository for [ICR](https://www.kaggle.com/competitions/icr-identify-age-related-conditions) (Identifying Age-Related Conditions) competition.
 
 This is my first time to participate in a kaggle expert competition, which challenges me a lot. Below I introduce my final code and summarize the experience, which may of some help for you.
 
